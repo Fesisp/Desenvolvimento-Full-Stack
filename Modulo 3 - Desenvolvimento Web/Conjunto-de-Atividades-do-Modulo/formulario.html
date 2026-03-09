@@ -1,0 +1,56 @@
+<!-- Cadastro de Eventos-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+    <title>Cadastro de Eventos</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="main.html">Home</a></li>
+                <li><a href="tabelas.html">Tabelas</a></li>
+                <li><a href="semantica.html">Semântica</a></li>
+                <li><a href="formulario.html">Formulário</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1> Cadastro de Eventos</h1>
+        <form action="cadastro.php" method="post">
+            <label for="nome">Nome do Evento:</label>
+            <input type="text" id="nome" name="nome" required><br><br>
+
+            <label for="email">Email do visitante:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="idade">Idade do visitante:</label>
+            <input type="number" id="idade" name="idade" required><br><br>
+
+            <label for="ingresso">Tipo de Ingresso:</label>
+            <input type="radio" id="padrao" name="ingresso" value="padrao" required>
+            <label for="padrao">Padrão</label>
+            <input type="radio" id="vip" name="ingresso" value="vip">
+            <label for="vip">VIP</label><br><br>
+
+            <label for="interesses">Interesses:</label><br>
+            <input type="checkbox" id="tech" name="interesses" value="tecnologia">
+            <label for="tech">Tecnologia</label><br>
+            <input type="checkbox" id="design" name="interesses" value="design">
+            <label for="design">Design</label><br>
+
+            <label for="pais">País:</label>
+            <select id="pais" name="pais" required>
+                <option value="">Selecione um país</option>
+                <option value="brasil">Brasil</option>
+                <option value="venezuela">Venezuela</option>
+                <option value="estados unidos">EUA</option>
+            </select><br><br>
+
+            <input type="submit" value="Enviar Cadastro">
+        </form>
+    </main>
+</body>
+</html>
