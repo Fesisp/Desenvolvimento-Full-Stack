@@ -1,15 +1,41 @@
 // src/components/HabitList.jsx
-import { useState } from 'react'
+// Passo 1 = Montagem
+import { useEffect, useState } from 'react'
 import HabitCard from './HabitCard'
 function HabitList() {
-    const [habits, setHabits] = useState([
-    { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
-    { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
-    { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
-    { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
-    ])
+    const [habits, setHabits] = useState(() => {
+        const stored = localStorage.getItem('my-daily-habits')
+        if (!stored) return [
+            { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
+            { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
+            { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
+            { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
+        ]
+        try {
+            return JSON.parse(stored)
+        } catch {
+            return []
+        }})
+        useEffect(() => {
+            localStorage.setItem('my-daily-habits', JSON.stringify(habits))
+        }, [habits])
+        const limparHistorico = () => {
+            localStorage.removeItem('my-daily-habits')
+            setHabits([
+                { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
+                { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
+                { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
+                { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
+            ])
+        }
+    <button onClick={limparHistorico}>Limpar Histórico</button>
     const removerHabit = (id) => {
-        setHabits(habits.filter(habit => habit.id !== id))
+        setHabits(habits.filter(habit => habit.id !== id))}
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        if (name === 'novoNome') setNovoNome(value)
+        if (name === 'novaDescricao') setNovaDescricao(value)
+        if (name === 'novaCategoria') setNovaCategoria(value)
     }
     const [novoNome, setNovoNome] = useState('')
     const [novaDescricao, setNovaDescricao] = useState('')
@@ -26,7 +52,7 @@ function HabitList() {
             descricao: novaDescricao,
             meta: 7, 
             ativo: true,
-            diasFeitos: 0
+            diasFeitos: 0,
             categoria: novaCategoria || 'Geral',
         }
         setHabits([...habits, novoHabit])
@@ -39,12 +65,25 @@ function HabitList() {
             <form onSubmit={adicionarHabit} className="habit-form">
                 <div>
                     <label>
-                        Nome do hábito *
                         <input
-                            type="text"
-                            value={novoNome}
-                            onChange={(e) => setNovoNome(e.target.value)}
-                        />
+                        type="text"
+                        value={novoNome}
+                        onChange={(e) => setNovoNome(e.target.value)}/>
+                        <input
+                        type="text"
+                        name="novoNome"
+                        value={novoNome}
+                        onChange={handleChange}/>
+                        <input
+                        type="text"
+                        name="novaDescricao"
+                        value={novaDescricao}
+                        onChange={handleChange}/>
+                        <input
+                        type="text"
+                        name="novaCategoria"
+                        value={novaCategoria}
+                        onChange={handleChange}/>
                     </label>
                 </div>
                 <div>
@@ -70,7 +109,9 @@ function HabitList() {
                 <button type="submit">Adicionar Hábito</button>
             </form>
             <ul>
-                [habits.length === 0 && <p>Nenhum hábito cadastrado ainda.</p>]
+                {habits.length === 0 
+                ?<p>Nenhum hábito cadastrado ainda.</p>
+                :<p>Você tem {habits.length} hábitos(s) cadastrados(s).</p>}
                 {habits.map((habit) => (
                     <HabitCard
                         key={habit.id}
@@ -86,5 +127,6 @@ function HabitList() {
         </section>
     )
 }
+
 
 export default HabitList
