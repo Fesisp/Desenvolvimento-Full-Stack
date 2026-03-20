@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react'
 export const HabitsContext = createContext(null)
 export function HabitsProvider({ children }) {
@@ -14,14 +15,23 @@ export function HabitsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem('my-daily-habits', JSON.stringify(habits))
     }, [habits])
+
     const adicionarHabit = (novoHabit) => {
-        setHabits(prev => [...prev, ...novoHabit])
+        setHabits(prev => [...prev, novoHabit])
     }
+
     const removerHabit = (id) => {
         setHabits(prev => prev.filter(h => h.id !== id))
     }
+
+    const toggleAtivo = (id) => {
+        setHabits(prev =>
+            prev.map(h => (h.id === id ? { ...h, ativo: !h.ativo } : h)),
+        )
+    }
+
     return (
-        <HabitsContext.Provider value={{ habits, adicionarHabit, removerHabit }}>
+        <HabitsContext.Provider value={{ habits, adicionarHabit, removerHabit, toggleAtivo }}>
             {children}
         </HabitsContext.Provider>
     )
